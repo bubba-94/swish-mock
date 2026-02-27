@@ -1,0 +1,8 @@
+
+{
+    "payeeAlias": "0767639956",
+    "amount": 20,
+    "currency": "SEK",
+    "callbackUrl": "/callback",
+    "message": "Test payment"
+}
