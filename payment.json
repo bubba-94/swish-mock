@@ -1,8 +1,10 @@
-
-{
-    "payeeAlias": "0767639956",
-    "amount": 20,
-    "currency": "SEK",
-    "callbackUrl": "/callback",
-    "message": "Test payment"
-}
+[
+    {
+        "amount": 10,
+        "status": null,
+        "payeeAlias": "user123",
+        "currency": "SEK",
+        "callbackUrl": "http://localhost:8443/callback",
+        "message": "Payment created"
+    }
+]

@@ -10,5 +10,6 @@ RUN make
 FROM debian:stable-slim
 WORKDIR /app
 COPY --from=builder /app/ppw-server .
+COPY --from=builder /app/payment.json .
 EXPOSE 8443
 CMD ["./ppw-server"]

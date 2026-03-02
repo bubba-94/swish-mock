@@ -1,52 +1,83 @@
-// Standard library
-#include <iostream>
-#include <thread>
-#include <unordered_map>
-#include <functional>
-#include <fstream>
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
-#include <ctime>
-#include <chrono>
+#include "types.hpp"
 
-// External
-#include "httplib.h"
-#include <nlohmann/json.hpp>
+namespace Payments{
+    enum class Status: uint8_t{
+        PAID,
+        PENDING,
+        DECLINED,
+        ERROR,
+        CANCELLED
+    };
+    
+    typedef struct {
+        uint16_t id;
+        uint16_t amount;
+        Status status;
+        std::string payeeAlias;
+        std::string currency;
+        std::string callbackUrl;
+        std::string message;
+    }Payment;
 
-enum class HttpMethod{
-    GET, POST, PATCH
+    using PaymentsMap = std::unordered_map<uint16_t, Payment>;
+    
+    class Controller{
+    public:
+        explicit Controller();
+        ~Controller();
+        const PaymentsMap& getMap();
+        void load(const std::string& path);
+        uint16_t createPayment(const Payment& p);
+        void postNewPayment(int paymentId);
+        void getAllPayments();
+        void getStatusById();
+        void patchStatusById();
+        void printPayments();
+        void flushMap();
+        int generateId();
+        const std::string convert(Status status);
+        PaymentsMap payMap;
+    private:
+        uint16_t nextId = 1;
+        static json load_json(const std::string& path);
+    };
 };
 
-using ResRef = httplib::Response&;
-using CReqRef = const httplib::Request&;
-using json = nlohmann::json;
-using SystemClock = std::chrono::time_point<std::chrono::system_clock>;
-using Handler = std::function<void(const httplib::Request&, httplib::Response&)>;
-using RouteMap = std::unordered_map<HttpMethod, std::unordered_map<std::string, Handler>>;
+class Routes{
+    public: 
+        explicit Routes(Payments::Controller& controller);
+        ~Routes();
+        void addRoute(HttpMethod method, const std::string& endpoint, Handler handler);
+        RouteMap& getRoutes();
+        void getHello(CReqRef req, ResRef res);
+        void getAllPayments(CReqRef req, ResRef res);
+        void postPayment(CReqRef req, ResRef res);
+        void patchPaymentStatusById(CReqRef req, ResRef res);
+        void getPaymentStatusById(CReqRef req, ResRef res);
+    private:
+        RouteMap routes;
+        Payments::Controller& controller;
+};
 
 class Server{
-public:
-
-    Server(const std::string& path, int port);
-    ~Server();
-    void run();
-    void addRoute(HttpMethod method, const std::string& endpoint, Handler handler);
-    bool processPayment();
-    std::string printHttpMethod(HttpMethod method);
-
-    bool startPayment = false;
-private:
-    std::thread worker;
-    const std::string host;
-    int port = 0;
-    httplib::Server server;
-    RouteMap routes;
+    public:
+    
+        Server(const std::string& path, int port);
+        ~Server();
+        void run();
+        bool processPayment();
+        std::string printHttpMethod(HttpMethod method);
+        
+        bool startPayment = false;
+    private:
+        std::thread worker;
+        const std::string host;
+        int port = 0;
+        Payments::Controller controller;
+        Routes routes;
+        httplib::Server server;
 };
-
-class Controller{
-public: 
-    static json load_json(const std::string& path);
-    static void getHello(CReqRef req, ResRef res);
-    static void postPayment(Server& server, CReqRef req, ResRef res);
-    static void patchPaymentStatusById(CReqRef req, ResRef res);
-    static void getPaymentStatusById(CReqRef req, ResRef res);
-};
+#endif
