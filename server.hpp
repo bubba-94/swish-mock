@@ -4,23 +4,6 @@
 #include "types.hpp"
 
 namespace Payments{
-    enum class Status: uint8_t{
-        PAID,
-        PENDING,
-        DECLINED,
-        ERROR,
-        CANCELLED
-    };
-    
-    typedef struct {
-        uint16_t id;
-        uint16_t amount;
-        Status status;
-        std::string payeeAlias;
-        std::string currency;
-        std::string callbackUrl;
-        std::string message;
-    }Payment;
 
     using PaymentsMap = std::unordered_map<uint16_t, Payment>;
     
@@ -30,15 +13,20 @@ namespace Payments{
         ~Controller();
         const PaymentsMap& getMap();
         void load(const std::string& path);
-        uint16_t createPayment(const Payment& p);
-        void postNewPayment(int paymentId);
+        
+        // Endpoint specifics
         void getAllPayments();
-        void getStatusById();
-        void patchStatusById();
+        json getStatusById(int id);
+        bool findMapId(int id);
+        void patchStatusById(int id, CReqRef req);
+        uint16_t postNewPayment(CReqRef res);
+        
+        // Helpers for endpoints
         void printPayments();
-        void flushMap();
+        void flushPayment(int key);
         int generateId();
-        const std::string convert(Status status);
+        const std::string statusToStr(Status status);
+        Status strToStatus(const std::string& str);
         PaymentsMap payMap;
     private:
         uint16_t nextId = 1;
@@ -57,7 +45,13 @@ class Routes{
         void postPayment(CReqRef req, ResRef res);
         void patchPaymentStatusById(CReqRef req, ResRef res);
         void getPaymentStatusById(CReqRef req, ResRef res);
+
+
+        void paymentProcess(int id);
+        bool checkCallbackURL(int id);
     private:
+        std::atomic<bool>processPayment = false;
+        std::thread worker;
         RouteMap routes;
         Payments::Controller& controller;
 };
@@ -68,16 +62,16 @@ class Server{
         Server(const std::string& path, int port);
         ~Server();
         void run();
-        bool processPayment();
+
         std::string printHttpMethod(HttpMethod method);
         
-        bool startPayment = false;
     private:
-        std::thread worker;
         const std::string host;
         int port = 0;
+
         Payments::Controller controller;
         Routes routes;
+
         httplib::Server server;
 };
 #endif

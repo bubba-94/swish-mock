@@ -4,9 +4,11 @@
 // Standard library
 #include <iostream>
 #include <thread>
+#include <atomic>
 #include <unordered_map>
 #include <functional>
 #include <fstream>
+#include <optional>
 
 #include <ctime>
 #include <chrono>
@@ -15,6 +17,27 @@
 #include <nlohmann/json.hpp>
 #include "server.hpp"
 #include "httplib.h"
+
+namespace Payments{
+
+    enum class Status: uint8_t{
+        VALID,
+        PENDING,
+        DECLINED,
+        ERROR,
+        CANCELLED
+    };
+    
+    typedef struct {
+        uint16_t amount;
+        Status status;
+        std::string payeeAlias;
+        std::string currency;
+        std::string callbackUrl;
+        std::string message;
+    }Payment;
+
+};
 
 enum class HttpMethod{
     GET, POST, PATCH
