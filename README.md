@@ -1,7 +1,7 @@
 # Mock Swish payment request
 
-![NOTE]
-Still under construction
+> [!NOTE]
+> Still under construction
 
 ## Requires
 
