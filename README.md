@@ -21,7 +21,7 @@ Image will be available on DockerHub([link here]()) when ready.
 
 
 1. Build container: `docker build -t ppw-server .`
-2. Open container: `docker run -p 8443:8443 --name ppw-server -it ppw-server:latest /bin/shdocker run -p 8443:8443 --name ppw-server -it ppw-server:latest /bin/sh`
+2. Open container: `docker run -p 8443:8443 --name ppw-server -it ppw-server:latest /bin/sh`
 3. Inside container shell: `./ppw-server`
 
 ## Testing with curl
