@@ -26,9 +26,9 @@ Image will be available on DockerHub([link here]()) when ready.
 
 ## Testing with curl
 
-Run from client side [(app)](https://github.com/bubba-94/pay-per-weigh)
-Container binds to 0.0.0.0 and port 8443
-Example URL: localhost:8443/hi.
+- Run from client side [(app)](https://github.com/bubba-94/pay-per-weigh)
+- Container binds to 0.0.0.0 and port 8443
+- Example URL: localhost:8443/hi.
 
 Example flow:
 ```bash
