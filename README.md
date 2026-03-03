@@ -8,6 +8,7 @@
 - Docker
 - nlohmann-json (installed in Docker)
 - curl
+- [cpp-httplib](https://github.com/yhirose/cpp-httplib)
 
 ## Description 
 
