@@ -17,6 +17,7 @@ namespace Payments{
         // Endpoint specifics
         void getAllPayments();
         json getStatusById(int id);
+        json getAllPaymentsJson();
         bool findMapId(int id);
         void patchStatusById(int id, CReqRef req);
         uint16_t postNewPayment(CReqRef res);

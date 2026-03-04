@@ -98,6 +98,10 @@ void Routes::getHello(CReqRef req, ResRef res){
 
 void Routes::getAllPayments(CReqRef req, ResRef res){ 
     controller.printPayments();
+
+    json response = controller.getAllPaymentsJson();
+
+    res.set_content(response.dump(), "application/json");
 }
 
 // Create a new payment (start process) 
@@ -149,17 +153,15 @@ void Routes::paymentProcess(int id){
     if (!callback){
         controller.flushPayment(id);
     } 
-    std::this_thread::sleep_for(std::chrono::seconds(5));
 }
 
 bool Routes::checkCallbackURL(int id){
-    std::cout << "Processing payment registration....\n";
     const std::string validCallback = "http://localhost:8443/callback";
+    std::cout << "Processing payment registration....\n";
 
     for (auto& [key, val] : controller.payMap){
         if (id == key){
             if (val.callbackUrl == validCallback){
-                // Sleep for 5 sec first
                 std::cout << "Payment: " << id << " has valid callback\n";
                 return true;
             }
@@ -179,6 +181,20 @@ bool Payments::Controller::findMapId(int id){
     }
     return false;
 }
+
+json Payments::Controller::getAllPaymentsJson() {
+    json response = json::array();
+    for (const auto& payment : payMap) {
+        json obj;
+        obj["id"] = payment.first;
+        obj["status"] = statusToStr(payment.second.status);
+
+        response.push_back(obj);
+    }
+
+    return response;
+}
+
 json Payments::Controller::getStatusById(int id){
     json response; 
     bool checkId = findMapId(id);
@@ -210,10 +226,7 @@ uint16_t Payments::Controller::postNewPayment(CReqRef req){
             p.currency = body.at("currency");
             p.callbackUrl = body.at("callbackUrl");
             p.message = body.at("message");
-
-            if (body.at("status").is_null()) {
-                p.status = Status::PENDING;
-            }
+            p.status = Status::PENDING;
 
             uint16_t key = generateId();
 
@@ -279,7 +292,6 @@ void Payments::Controller::printPayments() {
         std::cout << "No payments found.\n";
         return;
     }
-
     std::cout << "==== Payments ====\n";
 
     for (const auto&  [key, p]: payMap) {
@@ -297,7 +309,10 @@ void Payments::Controller::printPayments() {
 int Payments::Controller::generateId(){
     srand(time(0));
     int random = rand() % 101;
-    if (auto search = payMap.find(random); search != payMap.end()){
+    if (auto search = payMap.find(random); search != payMap.end()./pp){
+        return generateId();
+    }
+    if (random == 0){
         return generateId();
     }
     return random;

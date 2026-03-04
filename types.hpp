@@ -21,10 +21,11 @@
 namespace Payments{
 
     enum class Status: uint8_t{
+        ERROR,
         VALID,
         PENDING,
+        CREATED,
         DECLINED,
-        ERROR,
         CANCELLED
     };
     
