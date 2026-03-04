@@ -112,7 +112,11 @@ void Routes::postPayment(CReqRef req, ResRef res){
     if (worker.joinable()){
         worker.join();
     }
-    processPayment = false;
+
+    json response;
+    response["id"] = id;
+
+    res.set_content(response.dump(), "application/json");
 }
 
 // Patch the Payment to any valid value. 
