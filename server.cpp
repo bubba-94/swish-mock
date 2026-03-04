@@ -309,7 +309,7 @@ void Payments::Controller::printPayments() {
 int Payments::Controller::generateId(){
     srand(time(0));
     int random = rand() % 101;
-    if (auto search = payMap.find(random); search != payMap.end()./pp){
+    if (auto search = payMap.find(random); search != payMap.end()){
         return generateId();
     }
     if (random == 0){
