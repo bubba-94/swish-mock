@@ -270,13 +270,15 @@ void Payments::Controller::load(const std::string& path)
 
 const std::string Payments::Controller::statusToStr(Status status){
     switch (status){
+        case Status::CREATED: return "CREATED";
         case Status::VALID: return "VALID";
         case Status::PENDING: return "PENDING";
         case Status::DECLINED: return "DECLINED";
         case Status::ERROR: return "ERROR";
         case Status::CANCELLED: return "CANCELLED";
-        default: return " ";
+        case Status::UNKNOWN: break;
     }
+    return "ERROR";
 }
 
 Payments::Status Payments::Controller::strToStatus(const std::string& str) {
@@ -285,6 +287,9 @@ Payments::Status Payments::Controller::strToStatus(const std::string& str) {
     if (str == "DECLINED") return Status::DECLINED;
     if (str == "ERROR") return Status::ERROR;
     if (str == "CANCELLED") return Status::CANCELLED;
+    if (str == "CREATED") return Status::CREATED;
+
+    return Status::UNKNOWN;
 }
 
 void Payments::Controller::printPayments() {

@@ -16,14 +16,25 @@ Container should serve as a mock server for the possibility of making a payment 
 This is all for personal educational purposes.
 Used with [pay-per-weigh](https://github.com/bubba-94/pay-per-weigh) application.
 
-## Building container 
+## Building
+
+### Docker container 
 
 Image will be available on DockerHub([link here]()) when ready.
-
+- Builds binary in the container.
 
 1. Build container: `docker build -t ppw-server .`
 2. Open container: `docker run -p 8443:8443 --name ppw-server -it ppw-server:latest /bin/sh`
 3. Inside container shell: `./ppw-server`
+
+_____
+
+## Building binary
+
+Right now the Makefile is building for aarch64 (Raspberry Pi).
+- Both application and server running on Pi.
+- 1. `make` in root repo to compile binary.
+- 2. `./bin/ppw-server` from root repo to run server.
 
 ## Testing with curl
 
@@ -52,7 +63,6 @@ curl -X POST http://localhost:8443/paymentRequest \
 -H "Content-Type: application/json" \
 -d '{
     "amount": 20,
-    "status": null,
     "payeeAlias": "liatest",
     "currency": "SEK",
     "callbackUrl": "http://localhost:8443/callback",

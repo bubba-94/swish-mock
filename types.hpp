@@ -26,7 +26,8 @@ namespace Payments{
         PENDING,
         CREATED,
         DECLINED,
-        CANCELLED
+        CANCELLED,
+        UNKNOWN,
     };
     
     typedef struct {
