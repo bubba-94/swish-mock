@@ -34,7 +34,8 @@ _____
 Right now the Makefile is building for aarch64 (Raspberry Pi).
 - Both application and server running on Pi.
 - 1. `make` in root repo to compile binary.
-- 2. `./bin/ppw-server` from root repo to run server.
+- 2. `./ppw-server` from root repo to run server.
+- 3. Requires a test file in root repo named: `payment.json`.
 
 ## Testing with curl
 

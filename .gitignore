@@ -3,6 +3,9 @@
 bin/
 build/
 
+# Binary
+ppw-server
+
 # Build artifacts
 *.o
 *.lo
