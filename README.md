@@ -20,8 +20,8 @@ Used with [pay-per-weigh](https://github.com/bubba-94/pay-per-weigh) application
 
 ### Docker container 
 
-Image on DockerHub([link](https://hub.docker.com/r/moodin/ppw-server)).
-- Builds binary in the container.
+Image on DockerHub([link](https://hub.docker.com/r/moodin/ppw-server)).  
+Builds binary in the container.
 
 1. Build container: `docker build -t ppw-server .`
 2. Open container: `docker run -p 8443:8443 --name ppw-server -it ppw-server:latest /bin/sh`
@@ -31,11 +31,11 @@ _____
 
 ## Building binary
 
-Right now the Makefile is building for aarch64 (Raspberry Pi).
-- Both application and server running on Pi.
-- 1. `make` in root repo to compile binary.
-- 2. `./ppw-server` from root repo to run server.
-- 3. Requires a test file in root repo named: `payment.json`.
+Right now the Makefile is building for aarch64 (Raspberry Pi)  
+Both application and server running on Pi.  
+  1. `make` in root repo to compile binary.
+  2. `./ppw-server` from root repo to run server.
+  3. Requires a test file in root repo named: `payment.json`.
 
 ## Testing with curl
 
