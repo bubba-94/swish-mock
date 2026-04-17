@@ -1,9 +1,9 @@
 # Mock Swish payment request
 
-> [!WARNING]
-> Still under construction
+> [!NOTE]
+> This application is designed for a certain purpose but has support for the endpoints below.
 
-## Requires
+## Requirements
 
 - Docker
 - nlohmann-json (installed in Docker)
@@ -20,7 +20,7 @@ Used with [pay-per-weigh](https://github.com/bubba-94/pay-per-weigh) application
 
 ### Docker container 
 
-Image will be available on DockerHub([link here]()) when ready.
+Image on DockerHub([link](https://hub.docker.com/r/moodin/ppw-server)).
 - Builds binary in the container.
 
 1. Build container: `docker build -t ppw-server .`
